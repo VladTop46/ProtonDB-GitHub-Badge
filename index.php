@@ -1,6 +1,16 @@
 <?php
-$USER_ID = '609457498'; # change to your real ProtonDB ID
+$DEFAULT_USER_ID = '609457498'; # default ProtonDB ID if none provided
 $BADGE_COLOR = 'red'; # change this to your preferred color (example red, green, blue)
+
+// get user ID from GET parameter or use default
+$USER_ID = isset($_GET['id']) && !empty($_GET['id']) ? $_GET['id'] : $DEFAULT_USER_ID;
+
+// validate user ID (should be numeric)
+if (!is_numeric($USER_ID)) {
+    $badgeUrl = "https://img.shields.io/badge/ProtonDB%20reports-invalid%20ID-red?logo=steam";
+    header("Location: {$badgeUrl}");
+    exit;
+}
 
 function getReportsCount($userId) {
     $apiUrl = "https://www.protondb.com/data/users/by_id/{$userId}.json";
